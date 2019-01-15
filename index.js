@@ -61,10 +61,10 @@ SqlStore.prototype.connect = function (cb) {
     } else {
       throw new Error("Unhandled dialect: " + dialect);
     }
-    self.adapter.knex.raw(sql).then(function () {
+    return self.adapter.knex.raw(sql).then(function () {
       return self.adapter.knex(self.tableName).count('*').where('lock', '').then(function (rows) {
         var row = rows[0];
-        cb(null, row ? row['count'] || row['count(*)'] : 0);
+        return cb(null, row ? row['count'] || row['count(*)'] : 0);
       });
     }).error(cb);
   });
